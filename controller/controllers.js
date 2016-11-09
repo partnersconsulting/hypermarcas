@@ -13,21 +13,22 @@ angular.module("App.controllers", [])
         }];
 
     })
-    .controller("VoluntariosController", function($scope, $rootScope) {
+    .controller("VoluntariosController", function($scope, $rootScope, $filter) {
 
 
+        $rootScope.tabactive = 0;
+        $rootScope.viewVoluntario = false;
+        $scope.collapseFormValuntario = true;
 
-        $rootScope.collapseFormValuntario = true;
-        $scope.newVoluntario = {};
-        
+
 
         function novo() {
-            $scope.newVoluntario = {};
-            $scope.newVoluntario.data_cadastro = new Date();
-            $scope.newVoluntario.ativo = true;
+            $scope.voluntario = {};
+            $scope.voluntario.data_cadastro = new Date();
+            $scope.voluntario.ativo = true;
         }
 
-        novo();
+
 
         $scope.links = [{
             title: "Cadastro",
@@ -41,27 +42,61 @@ angular.module("App.controllers", [])
             link: "/cotacoes"
         }];
 
+        $rootScope.dataValidade = function(date) {
+            if (date) {
 
+                return date.getDate() + '/' + (date.getMonth() + 6) + '/' + date.getFullYear();
+            }
+        }
 
-        $scope.visualizarFormulario = function() {
-            $rootScope.collapseFormValuntario = false;
-            $rootScope.voluntario = null;
+        $scope.checkPesquisa = function(id) {
+            if ($scope.voluntario && $scope.voluntario.pesquisas) {
+
+                return $filter('getById')($scope.voluntario.pesquisas, id);
+            }
+        }
+
+        $scope.addAnexo = function() {
+            $scope.voluntario.anexos = [{ id: 1, nome: 'webcam', url: 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMTQwIiBoZWlnaHQ9IjE0MCIgdmlld0JveD0iMCAwIDE0MCAxNDAiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPjwhLS0KU291cmNlIFVSTDogaG9sZGVyLmpzLzE0MHgxNDAKQ3JlYXRlZCB3aXRoIEhvbGRlci5qcyAyLjYuMC4KTGVhcm4gbW9yZSBhdCBodHRwOi8vaG9sZGVyanMuY29tCihjKSAyMDEyLTIwMTUgSXZhbiBNYWxvcGluc2t5IC0gaHR0cDovL2ltc2t5LmNvCi0tPjxkZWZzPjxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI+PCFbQ0RBVEFbI2hvbGRlcl8xNTg0Njk5MzEzOSB0ZXh0IHsgZmlsbDojQUFBQUFBO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1mYW1pbHk6QXJpYWwsIEhlbHZldGljYSwgT3BlbiBTYW5zLCBzYW5zLXNlcmlmLCBtb25vc3BhY2U7Zm9udC1zaXplOjEwcHQgfSBdXT48L3N0eWxlPjwvZGVmcz48ZyBpZD0iaG9sZGVyXzE1ODQ2OTkzMTM5Ij48cmVjdCB3aWR0aD0iMTQwIiBoZWlnaHQ9IjE0MCIgZmlsbD0iI0VFRUVFRSIvPjxnPjx0ZXh0IHg9IjQ0LjMxMjUiIHk9Ijc0LjUiPjE0MHgxNDA8L3RleHQ+PC9nPjwvZz48L3N2Zz4=', tamanho: '1MB', data: new Date() }];
+        }
+
+        $scope.addPesquisa = function(idPesquisa) {
+
+            if (!$scope.voluntario.pesquisas) {
+                $scope.voluntario.pesquisas = [];
+            }
+
+            $scope.voluntario.pesquisas.push({ id: idPesquisa, pesquisa: $rootScope.listaPesquisas[idPesquisa] });
+        }
+
+        $scope.closeTabs = function() {
+            $scope.voluntario = null;
+            $rootScope.viewVoluntario = false;
+            $scope.collapseFormValuntario = true;
+        }
+
+        $scope.novoVoluntario = function() {
+            $scope.collapseFormValuntario = false;
+            novo();
+
         }
 
         $scope.visualizarVoluntario = function(voluntario) {
             console.log(">> " + voluntario);
-            $rootScope.voluntario = voluntario;
-            $rootScope.collapseFormValuntario = true;
+            $scope.voluntario = voluntario;
+            $rootScope.viewVoluntario = true;
+            $scope.collapseFormValuntario = false;
         }
 
         $scope.salvarVoluntario = function() {
 
+            console.log(">> " + $scope.voluntario.data_nascimento);
 
             //if (formulario.$valid) {
-            $scope.newVoluntario.id = $rootScope.voluntarios.length + 1;
-            $scope.newVoluntario.sexo = $scope.newVoluntario.sexo.code;
-            $scope.newVoluntario.perfil = $scope.newVoluntario.perfil.code;
-            $rootScope.voluntarios.push($scope.newVoluntario);
+            $scope.voluntario.id = $rootScope.voluntarios.length + 1;
+            $scope.voluntario.sexo = $scope.voluntario.sexo.code;
+            $scope.voluntario.perfil = $scope.voluntario.perfil.code;
+            $rootScope.voluntarios.push($scope.voluntario);
             novo();
             $scope.addVoluntario = !$scope.addVoluntario;
             //}
@@ -79,6 +114,7 @@ angular.module("App.controllers", [])
             icon: "fa-search",
             text: "Consultar Lista Pesquisas",
             link: "/cotacoes"
+
         }];
 
     })
@@ -97,6 +133,18 @@ angular.module("App.controllers", [])
             { code: 'C', name: '' }
         ];
 
+        $rootScope.listaVoluntarioStatus = [
+            { code: 'Ativo', name: '' },
+            { code: 'Vencido', name: '' },
+            { code: 'Inativo', name: '' }
+        ];
+
+        $rootScope.listaVoluntarioMotivo = [
+            { code: 'Gestante', name: '' },
+            { code: 'Falecimento', name: '' },
+            { code: 'Opt OUT', name: '' }
+        ];
+
         $rootScope.listaTiposQuestionario = [
             { code: 'Tipo1', name: '' },
             { code: 'Tipo2', name: '' },
@@ -108,118 +156,6 @@ angular.module("App.controllers", [])
             { code: 'CategoriaD66', name: '' },
             { code: 'CategoriaXpto99', name: '' }
         ];
-
-        $rootScope.voluntarios = [{
-            id: '1',
-            nome: 'Marcos Aurelio',
-            data_nascimento: new Date('5/30/1988'),
-            data_cadastro: new Date('06/29/2016'),
-            telefone: '11 9 5155-5555',
-            sexo: 'masculino',
-            email: 'marcos_aurelio@gmail.com',
-            rg: '99899444455',
-            cpf: '77799955500',
-            perfil: 'A',
-            cep: '04013-010',
-            rua: 'Rua jose gomes sá',
-            numero: '21',
-            complemento: '',
-            bairro: 'Vila Mariana',
-            cidade: 'São Paulo',
-            estado: 'SP',
-            pais: 'Brasil',
-            obs: 'Nada',
-            ativo: true,
-            pesquisas: [
-                { id: 1, respondido: new Date('7/30/2016') },
-                { id: 2, respondido: new Date('5/5/2016') },
-                { id: 3, respondido: null },
-                { id: 4, respondido: null },
-                { id: 5, respondido: null }
-            ]
-        }, {
-            id: '2',
-            nome: 'Jose Silva',
-            data_nascimento: new Date('10/2/1977'),
-            data_cadastro: new Date('07/31/2016'),
-            telefone: '11 9 9999-5555',
-            sexo: 'masculino',
-            email: 'josesilva@gmail.com',
-            rg: '98798779877',
-            cpf: '55566655588',
-            perfil: 'B',
-            cep: '04999-010',
-            rua: 'Rua jose barreto',
-            numero: '31',
-            complemento: 'ap 2',
-            bairro: 'Paraiso',
-            cidade: 'São Paulo',
-            estado: 'SP',
-            pais: 'Brasil',
-            obs: 'Nada',
-            ativo: true,
-            pesquisas: [
-                { id: 1, respondido: new Date('9/5/2016') },
-                { id: 2, respondido: null },
-                { id: 3, respondido: null },
-                { id: 4, respondido: null },
-                { id: 5, respondido: null }
-            ]
-        }, {
-            id: '3',
-            nome: 'Maria do Socorro',
-            data_nascimento: new Date('5/20/1945'),
-            data_cadastro: new Date('02/19/2016'),
-            telefone: '71 9 8888-5555',
-            sexo: 'feminino',
-            email: 'maria@gmail.com',
-            rg: '564564564',
-            cpf: '44466644488',
-            perfil: 'A',
-            cep: '80555-810',
-            rua: 'Rua Chico Alencar',
-            numero: '999',
-            complemento: '',
-            bairro: 'Boa vista',
-            cidade: 'Salvador',
-            estado: 'BA',
-            pais: 'Brasil',
-            obs: '',
-            ativo: false,
-            pesquisas: [
-                { id: 1, respondido: new Date('3/15/2016') },
-                { id: 2, respondido: new Date('3/25/2016') },
-                { id: 3, respondido: new Date('4/12/2016') },
-                { id: 4, respondido: new Date('4/20/2016') }
-            ]
-        }, {
-            id: '4',
-            nome: 'Roberto Viana',
-            data_nascimento: new Date('12/5/1977'),
-            data_cadastro: new Date('07/25/2016'),
-            telefone: '22 9 6666-5555',
-            sexo: 'masculino',
-            email: 'roberto_viana@gmail.com',
-            rg: '9879879798',
-            cpf: '22266622299',
-            perfil: 'C',
-            cep: '07013-999',
-            rua: 'Rua gomes lisboa',
-            numero: '301',
-            complemento: 'ap 22',
-            bairro: 'Vila Clotilde',
-            cidade: 'Rio de Janeiro',
-            estado: 'RJ',
-            pais: 'Brasil',
-            obs: '',
-            ativo: true,
-            pesquisas: [
-                { id: 1, respondido: null },
-                { id: 2, respondido: null },
-                { id: 3, respondido: null }
-            ]
-        }];
-
 
         $rootScope.listaPesquisas = [{
                 id: '1',
@@ -403,72 +339,193 @@ angular.module("App.controllers", [])
                 desc: 'Texto explicando Q5',
                 validade: new Date('2/15/2017'),
                 perguntas: [{
-                        id: '1',
-                        titulo: 'Pergunta1',
-                        tipo: 'Tipo1',
-                        categoria: 'CategoriaD66',
-                        perfil: 'A',
-                        respostas: [
-                            { id: '1', titulo: 'Resposta A' },
-                            { id: '2', titulo: 'Resposta B' },
-                            { id: '3', titulo: 'Resposta C' }
-                        ]
-                    }, {
-                        id: '2',
-                        titulo: 'Pergunta2',
-                        tipo: 'Tipo2',
-                        categoria: 'CategoriaD66',
-                        perfil: 'B',
-                        respostas: [
-                            { id: '1', titulo: 'Resposta AA' },
-                            { id: '2', titulo: 'Resposta BB' },
-                            { id: '3', titulo: 'Resposta CC' }
-                        ]
-                    }, {
-                        id: '3',
-                        titulo: 'Pergunta3',
-                        tipo: 'Tipo1',
-                        categoria: 'CategoriaXpto99',
-                        perfil: 'B',
-                        respostas: [
-                            { id: '1', titulo: 'Resposta AAA' },
-                            { id: '2', titulo: 'Resposta BBB' },
-                            { id: '3', titulo: 'Resposta CCC' }
-                        ]
-                    }, {
-                        id: '4',
-                        titulo: 'Pergunta4',
-                        tipo: 'Tipo3',
-                        categoria: 'CategoriaXpto99',
-                        perfil: 'C',
-                        respostas: [
-                            { id: '1', titulo: 'Resposta AAAA' },
-                            { id: '2', titulo: 'Resposta BBBB' },
-                            { id: '3', titulo: 'Resposta CCCC' }
-                        ]
-                    }, {
-                        id: '5',
-                        titulo: 'Pergunta5',
-                        tipo: 'Tipo1',
-                        categoria: 'CategoriaXpto99',
-                        perfil: 'C',
-                        respostas: [
-                            { id: '1', titulo: 'Resposta AAAAA' },
-                            { id: '2', titulo: 'Resposta BBBBB' },
-                            { id: '3', titulo: 'Resposta CCCCC' }
-                        ]
-                    }
-                ]
+                    id: '1',
+                    titulo: 'Pergunta1',
+                    tipo: 'Tipo1',
+                    categoria: 'CategoriaD66',
+                    perfil: 'A',
+                    respostas: [
+                        { id: '1', titulo: 'Resposta A' },
+                        { id: '2', titulo: 'Resposta B' },
+                        { id: '3', titulo: 'Resposta C' }
+                    ]
+                }, {
+                    id: '2',
+                    titulo: 'Pergunta2',
+                    tipo: 'Tipo2',
+                    categoria: 'CategoriaD66',
+                    perfil: 'B',
+                    respostas: [
+                        { id: '1', titulo: 'Resposta AA' },
+                        { id: '2', titulo: 'Resposta BB' },
+                        { id: '3', titulo: 'Resposta CC' }
+                    ]
+                }, {
+                    id: '3',
+                    titulo: 'Pergunta3',
+                    tipo: 'Tipo1',
+                    categoria: 'CategoriaXpto99',
+                    perfil: 'B',
+                    respostas: [
+                        { id: '1', titulo: 'Resposta AAA' },
+                        { id: '2', titulo: 'Resposta BBB' },
+                        { id: '3', titulo: 'Resposta CCC' }
+                    ]
+                }, {
+                    id: '4',
+                    titulo: 'Pergunta4',
+                    tipo: 'Tipo3',
+                    categoria: 'CategoriaXpto99',
+                    perfil: 'C',
+                    respostas: [
+                        { id: '1', titulo: 'Resposta AAAA' },
+                        { id: '2', titulo: 'Resposta BBBB' },
+                        { id: '3', titulo: 'Resposta CCCC' }
+                    ]
+                }, {
+                    id: '5',
+                    titulo: 'Pergunta5',
+                    tipo: 'Tipo1',
+                    categoria: 'CategoriaXpto99',
+                    perfil: 'C',
+                    respostas: [
+                        { id: '1', titulo: 'Resposta AAAAA' },
+                        { id: '2', titulo: 'Resposta BBBBB' },
+                        { id: '3', titulo: 'Resposta CCCCC' }
+                    ]
+                }]
             }
 
         ];
 
 
-        /*$rootScope.dataValidade = function(date) {
-            return date.getDate() + '/' + (date.getMonth() + 6) + '/' + date.getFullYear();
-        }
+        $rootScope.voluntarios = [{
+            id: '1',
+            nome: 'Marcos Aurelio',
+            status: {nome: $rootScope.listaVoluntarioStatus[0], motivo: ''},
+            data_nascimento: new Date('5/30/1988'),
+            data_cadastro: new Date('06/29/2016'),
+            telefone: '11 9 5155-5555',
+            sexo: 'masculino',
+            email: 'marcos_aurelio@gmail.com',
+            rg: '99899444455',
+            cpf: '77799955500',
+            perfil: 'A',
+            cep: '04013-010',
+            rua: 'Rua jose gomes sá',
+            numero: '21',
+            complemento: '',
+            bairro: 'Vila Mariana',
+            cidade: 'São Paulo',
+            estado: 'SP',
+            pais: 'Brasil',
+            obs: 'Nada',
+            ativo: true,
+            pesquisas: [
+                { respondido: new Date('7/30/2016'), pesquisa: $rootScope.listaPesquisas[0] },
+                { respondido: new Date('5/5/2016'), pesquisa: $rootScope.listaPesquisas[1] },
+                { respondido: null, pesquisa: $rootScope.listaPesquisas[2] },
+                { respondido: null, pesquisa: $rootScope.listaPesquisas[3] },
+                { respondido: null, pesquisa: $rootScope.listaPesquisas[4] }
+            ],
+            anexos: [
+                { id: 1, nome: 'webcam', url: null, tamanho: '1MB', data: new Date('7/30/2016') },
+                { id: 2, nome: 'rg', url: null, tamanho: '2MB', data: new Date('4/12/2016') },
+                { id: 3, nome: 'cpf', url: null, tamanho: '10MB', data: new Date('1/20/2016') }
+            ]
+        }, {
+            id: '2',
+            nome: 'Jose Silva',
+            status: {nome: $rootScope.listaVoluntarioStatus[0], motivo: ''},
+            data_nascimento: new Date('10/2/1977'),
+            data_cadastro: new Date('07/31/2016'),
+            telefone: '11 9 9999-5555',
+            sexo: 'masculino',
+            email: 'josesilva@gmail.com',
+            rg: '98798779877',
+            cpf: '55566655588',
+            perfil: 'B',
+            cep: '04999-010',
+            rua: 'Rua jose barreto',
+            numero: '31',
+            complemento: 'ap 2',
+            bairro: 'Paraiso',
+            cidade: 'São Paulo',
+            estado: 'SP',
+            pais: 'Brasil',
+            obs: 'Nada',
+            ativo: true,
+            pesquisas: [
+                { respondido: new Date('9/5/2016'), pesquisa: $rootScope.listaPesquisas[0] },
+                { respondido: null, pesquisa: $rootScope.listaPesquisas[1] },
+                { respondido: null, pesquisa: $rootScope.listaPesquisas[2] },
+                { respondido: null, pesquisa: $rootScope.listaPesquisas[3] },
+                { respondido: null, pesquisa: $rootScope.listaPesquisas[4] }
+            ]
+        }, {
+            id: '3',
+            nome: 'Maria do Socorro',
+            status: {nome: $rootScope.listaVoluntarioStatus[2], motivo:  $rootScope.listaVoluntarioMotivo[2]},
+            data_nascimento: new Date('5/20/1945'),
+            data_cadastro: new Date('02/19/2016'),
+            telefone: '71 9 8888-5555',
+            sexo: 'feminino',
+            email: 'maria@gmail.com',
+            rg: '564564564',
+            cpf: '44466644488',
+            perfil: 'A',
+            cep: '80555-810',
+            rua: 'Rua Chico Alencar',
+            numero: '999',
+            complemento: '',
+            bairro: 'Boa vista',
+            cidade: 'Salvador',
+            estado: 'BA',
+            pais: 'Brasil',
+            obs: '',
+            ativo: false,
+            pesquisas: [
+                { respondido: new Date('3/15/2016'), pesquisa: $rootScope.listaPesquisas[0] },
+                { respondido: new Date('3/25/2016'), pesquisa: $rootScope.listaPesquisas[1] },
+                { respondido: new Date('4/12/2016'), pesquisa: $rootScope.listaPesquisas[2] },
+                { respondido: new Date('4/20/2016'), pesquisa: $rootScope.listaPesquisas[3] }
+            ]
+        }, {
+            id: '4',
+            nome: 'Roberto Viana',
+            status: {nome: $rootScope.listaVoluntarioStatus[0], motivo: ''},
+            data_nascimento: new Date('12/5/1977'),
+            data_cadastro: new Date('07/25/2016'),
+            telefone: '22 9 6666-5555',
+            sexo: 'masculino',
+            email: 'roberto_viana@gmail.com',
+            rg: '9879879798',
+            cpf: '22266622299',
+            perfil: 'C',
+            cep: '07013-999',
+            rua: 'Rua gomes lisboa',
+            numero: '301',
+            complemento: 'ap 22',
+            bairro: 'Vila Clotilde',
+            cidade: 'Rio de Janeiro',
+            estado: 'RJ',
+            pais: 'Brasil',
+            obs: '',
+            ativo: true,
+            pesquisas: [
+                { respondido: null, pesquisa: $rootScope.listaPesquisas[0] },
+                { respondido: null, pesquisa: $rootScope.listaPesquisas[1] },
+                { respondido: null, pesquisa: $rootScope.listaPesquisas[2] }
+            ]
+        }];
 
 
+
+
+
+
+
+        /*
 
 
 

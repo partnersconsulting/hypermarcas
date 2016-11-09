@@ -45,11 +45,14 @@ angular.module('App.directives', [])
             title: '@title',
             size: '@size',
             type: '@type',
+            onlyview: '=',
             list: '=',
             model: '='
         }
 
         ddo.controller = function($scope, $attrs) {
+            //console.log("onlyview: " + $scope.model);
+
             if (!$scope.size) {
                 $scope.size = 2;
             }
@@ -62,10 +65,12 @@ angular.module('App.directives', [])
             element.attr('class', "col-md-" + attrs.size);
         }
 
-        ddo.templateUrl = 'view/directives/entry.html';
+        var r = '?n=' + Math.random();
+
+        ddo.templateUrl = 'view/directives/entry.html' + r;
         return ddo;
     })
-    .directive('showentry', function() {
+    /*.directive('showentry', function() {
         var ddo = {};
 
 
@@ -90,4 +95,4 @@ angular.module('App.directives', [])
 
         ddo.templateUrl = 'view/directives/showentry.html';
         return ddo;
-    })
+    })*/

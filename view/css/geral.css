@@ -123,6 +123,15 @@ select.form-control {
     margin: 10px 0;
 }
 
+.table-hover>tbody>tr:hover {
+    color: #666;
+}
+
+.form-group-view {
+        border: 1px solid #ccc;
+    padding: 0px 5px 2px;
+}
+
 .form-inline .form-control {
     color: #000000;
     background: #ffffff;
@@ -376,6 +385,11 @@ tfoot {
 
 
 /* ************** xxx ************** */
+
+.btn-pesquisa {
+       display: block;
+    margin: 5px 10px;
+}
 
 .table-products {
     margin: 10px 0;
