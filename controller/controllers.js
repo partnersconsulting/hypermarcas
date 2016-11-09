@@ -119,7 +119,7 @@ angular.module("App.controllers", [])
             cpf: '77799955500',
             perfil: 'A',
             cep: '04013-010',
-            rua: 'Rua jose gomes',
+            rua: 'Rua jose gomes sá',
             numero: '21',
             complemento: '',
             bairro: 'Vila Mariana',
