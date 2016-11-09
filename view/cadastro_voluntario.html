@@ -1,0 +1,107 @@
+<panel title="Cadastro de Voluntarios" linkback="cadastros">
+    <div class="input-group input-group-lg grupo-busca">
+        <span class="input-group-addon" id="sizing-addon1"><i class="fa fa-search" aria-hidden="true"></i></span>
+        <input type="text" class="form-control" placeholder="busca" aria-describedby="sizing-addon1" ng-model="filtro">
+    </div>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Codigo</th>
+                <th>Nome</th>
+                <th>Telefone</th>
+                <th>Sexo</th>
+                <th>Perfil</th>
+                <th>Cidade</th>
+                <th>Ativo</th>
+                <th>Validade</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="voluntario in voluntarios | filter:filtro" ng-class="{'danger':!voluntario.ativo}">
+                <td>{{voluntario.id}}</td>
+                <td>{{voluntario.nome}}</td>
+                <td>{{voluntario.telefone}}</td>
+                <td>{{voluntario.sexo}}</td>
+                <td>{{voluntario.perfil}}</td>
+                <td>{{voluntario.cidade}}-{{voluntario.estado}}</td>
+                <td><i class="fa" ng-class="{'fa-check-circle':voluntario.ativo, 'fa-times': !voluntario.ativo}"></i></td>
+                <td>{{dataValidade(voluntario.data_cadastro)}}</td>
+                <td> <span class="btn btn-info btn-xs" ng-click="visualizarVoluntario(voluntario)"><i class="fa fa-search" aria-hidden="true"></i></span></td>
+            </tr>
+        </tbody>
+    </table>
+    <div uib-collapse="voluntario == null" class="well">
+        <uib-tabset active="activeJustified" justified="true">
+            <uib-tab index="0" heading="Dados Gerais">
+                <div class="row flex-row">
+                    <showentry title="Nome" type="text" size="4" value="{{voluntario.nome}}"></showentry>
+                    <showentry title="Data Nascimento" type="datepicker" size="3" value="{{voluntario.data_nascimento | date:'dd-MM-yyyy'}}"></showentry>
+                    <showentry title="Telefone" type="phone" size="3" value="{{voluntario.telefone}}"></showentry>
+                    <showentry title="Sexo" type="select" size="3" value="{{voluntario.sexo}}"></showentry>
+                </div>
+                <div class="row flex-row">
+                    <showentry title="Email" type="email" size="4" value="{{voluntario.email}}"></showentry>
+                    <showentry title="Rg" type="number" size="3" value="{{voluntario.rg}}"></showentry>
+                    <showentry title="cpf" type="number" size="3" value="{{voluntario.cpf}}"></showentry>
+                    <showentry title="Perfil" type="select" size="2" value="{{voluntario.perfil}}"></showentry>
+                </div>
+                <div class="row flex-row">
+                    <showentry title="cep" type="number" size="2" value="{{voluntario.cep}}"></showentry>
+                    <showentry title="rua" type="text" size="4" value="{{voluntario.rua}}"></showentry>
+                    <showentry title="numero" type="number" size="2" value="{{voluntario.numero}}"></showentry>
+                    <showentry title="complemento" type="text" size="4" value="{{voluntario.complemento}}"></showentry>
+                </div>
+                <div class="row flex-row">
+                    <showentry title="bairro" type="text" size="3" value="{{voluntario.bairro}}"></showentry>
+                    <showentry title="cidade" type="text" size="3" value="{{voluntario.cidade}}"></showentry>
+                    <showentry title="estado" type="text" size="3" value="{{voluntario.estado}}"></showentry>
+                    <showentry title="pais" type="text" size="3" value="{{voluntario.pais}}"></showentry>
+                </div>
+                <div class="row flex-row">
+                    <showentry title="obs" type="textarea" size="12" value="{{newVoluntario.obs}}"></showentry>
+                </div>
+            </uib-tab>
+            <uib-tab index="1" heading="Questionarios">Short Labeled Justified content</uib-tab>
+            <uib-tab index="2" heading="Anexos">Long Labeled Justified content</uib-tab>
+            <uib-tab index="3" heading="Status">Long Labeled Justified content</uib-tab>
+        </uib-tabset>
+    </div>
+    <button type="button" class="btn btn-success" ng-show="collapseFormValuntario" ng-click="visualizarFormulario()"><i class="fa fa-plus" aria-hidden="true"></i> Adicionar Novo</button>
+    <div uib-collapse="collapseFormValuntario" class="cadastro-form">
+        <form novalidate name="formulario" ng-submit="salvarVoluntario(formulario)">
+            <div class="row flex-row">
+                <entry title="Nome" type="text" size="4" model="newVoluntario.nome"></entry>
+                <entry title="Data Nascimento" type="datepicker" size="3" model="newVoluntario.data_nascimento"></entry>
+                <entry title="Telefone" type="phone" size="3" model="newVoluntario.telefone"></entry>
+                <entry title="Sexo" type="select" size="3" model="newVoluntario.sexo" list="listaVoluntarioSexo"></entry>
+            </div>
+            <div class="row flex-row">
+                <entry title="Email" type="email" size="4" model="newVoluntario.email"></entry>
+                <entry title="Rg" type="number" size="3" model="newVoluntario.rg"></entry>
+                <entry title="cpf" type="number" size="3" model="newVoluntario.cpf"></entry>
+                <entry title="Perfil" type="select" size="2" model="newVoluntario.perfil" list="listaVoluntarioPerfil"></entry>
+            </div>
+            <div class="row flex-row">
+                <entry title="cep" type="number" size="2" model="newVoluntario.cep"></entry>
+                <entry title="rua" type="text" size="4" model="newVoluntario.rua"></entry>
+                <entry title="numero" type="number" size="2" model="newVoluntario.numero"></entry>
+                <entry title="complemento" type="text" size="4" model="newVoluntario.complemento"></entry>
+            </div>
+            <div class="row flex-row">
+                <entry title="bairro" type="text" size="3" model="newVoluntario.bairro"></entry>
+                <entry title="cidade" type="text" size="3" model="newVoluntario.cidade"></entry>
+                <entry title="estado" type="text" size="3" model="newVoluntario.estado"></entry>
+                <entry title="pais" type="text" size="3" model="newVoluntario.pais"></entry>
+            </div>
+            <div class="row flex-row">
+                <entry title="obs" type="textarea" size="12" model="newVoluntario.obs"></entry>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <button type="submit" class="btn btn-primary pull-right" ng-disabled="formulario.$invalid">Salvar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</panel>

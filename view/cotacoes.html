@@ -1,0 +1,33 @@
+<panel title="Cotações" linkback="consultas">
+    <div class="input-group input-group-lg">
+        <span class="input-group-addon" id="sizing-addon1"><i class="fa fa-search" aria-hidden="true"></i></span>
+        <input type="text" class="form-control" placeholder="busca" aria-describedby="sizing-addon1" ng-model="filtro">
+    </div>
+    <hr>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Codigo</th>
+                <th>Data Pedido</th>
+                <th>Cliente</th>
+                <th>Escritorio</th>
+                <th>Equipe</th>
+                <th>Regiao</th>
+                <th>Valor Total</th>
+                <th>Data Prevista</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="pedido in listaCotacoes | filter:filtro">
+                <th scope="row">{{pedido.code}}</th>
+                <th>{{pedido.data}}</th>
+                <th>{{pedido.cliente.code}}</th>
+                <th>{{pedido.escritorio.code}}</th>
+                <th>{{pedido.equipe.code}}</th>
+                <th>{{pedido.regiao.code}}</th>
+                <th>{{pedido.valorTotal | currency:"R$"}}</th>
+                <th>{{pedido.dataPrevista | date:'dd-MM-yyyy'}}</th>
+            </tr>
+        </tbody>
+    </table>
+</panel>

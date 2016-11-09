@@ -1,0 +1,209 @@
+<panel title="Cadastro de Produtos" linkback="cadastros">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Codigo</th>
+                <th>Nome</th>
+                <th>cotaLivre</th>
+                <th>valor</th>
+                <th>zona</th>
+                <th>gnv</th>
+                <th>grv</th>
+                <!-- <th>opcoes</th> -->
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="product in products">
+                <th scope="row">{{product.code}}</th>
+                <td>{{product.name}}</td>
+                <td>
+                    <i class="fa" ng-class="{'fa-check-circle':product.cotaLivre, 'fa-times': !product.cotaLivre}"></i>
+                </td>
+                <td>{{product.valor}}</td>
+                <td>{{product.zona}}</td>
+                <td>{{product.gnv}}</td>
+                <td>{{product.grv}}</td>
+                <!-- <td>{{product.opcoes}}</td> -->
+            </tr>
+        </tbody>
+    </table>
+    <button type="button" class="btn btn-success" ng-show="isCollapsed" ng-click="isCollapsed = !isCollapsed"><i class="fa fa-plus" aria-hidden="true"></i> Adicionar Novo</button>
+    <div uib-collapse="isCollapsed" class="cadastro-form">
+        <form action="">
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label>Codigo</label>
+                        <input type="number" class="form-control" ng-model="newProduct.code">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label>Nome</label>
+                        <input type="text" class="form-control" ng-model="newProduct.name">
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <div class="form-group">
+                        <label>Cota Livre</label>
+                        <input type="checkbox" class="form-control" ng-model="newProduct.cotaLivre">
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <div class="form-group">
+                        <label>Valor</label>
+                        <input type="number" class="form-control" ng-model="newProduct.valor">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label>Zona</label>
+                        <input type="number" class="form-control" ng-model="newProduct.zona">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label>GNV</label>
+                        <input type="number" class="form-control" ng-model="newProduct.gnv">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label>GRV</label>
+                        <input type="number" class="form-control" ng-model="newProduct.grv">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label>Tipo Bloqueio</label>
+                        <select class="dropdown-alpa" ng-model="newProduct.tipoBloqueio" ng-options="item.code for item in listaBloqueio"></select>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label>Tipo Estoque</label>
+                        <select class="dropdown-alpa" ng-model="newProduct.tipoEstoque" ng-options="item.code for item in listaEstoque"></select>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label>Data</label>
+                        <input type="text" class="form-control" ng-model="newProduct.data">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label>Estoque</label>
+                        <input type="number" maxlength="7" class="form-control" ng-model="newProduct.estoque">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label>Foto</label>
+                        <select class="dropdown-alpa" ng-model="newProduct.foto" ng-options="item.code for item in listaFotos"></select>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <img ng-if="newProduct.foto" class="img-responsive img-produto" src="view/images/{{newProduct.foto.code}}">
+                    </div>
+                </div>
+                <!-- 
+            $rootScope.products = [{
+            code: '400001',
+            name: 'Chaveiro',
+            cotaLivre: true,
+            tipoBloqueio: 'gnv',
+            tipoEstoque: 'geral',
+            estoque: '100000',
+            gnv: '110000',
+            grv: '20000',
+            zona: '1900',
+
+            data: '20/11/2016',
+            foto: 'chaveiro.jpg',
+            valor: 10.5,
+            opcoes: [{ tamanho: '001', cor: '1001', value: 0 }]
+        }, {
+         -->
+            </div>
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="well">
+                        <h4>Cores</h4>
+                        <div class="row">
+                            <table class="table table-hover table-sub">
+                                <thead>
+                                    <tr>
+                                        <th>Cor</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="cor in coresProdutos">
+                                        <td style="background-color: #{{cor.code}}">{{cor.code}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="row sub-panel">
+                            <div class="col-md-10">
+                                <div class="form-group">
+                                    <label>Nava Cor</label>
+                                    <input style="background-color: #{{newColorProduct.code}}" type="text" maxlength="6" class="form-control" ng-model="newColorProduct.code">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>&nbsp;</label>
+                                    <button type="button" class="btn btn-success btn-block" ng-click="salvarCorProduto()"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <div class="well">
+                        <h4>Tamanhos</h4>
+                        <div class="row">
+                            <table class="table table-hover table-sub">
+                                <thead>
+                                    <tr>
+                                        <th>Tamanho</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="item in tamanhosProdutos">
+                                        <td>{{item.tamanho}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="row sub-panel">
+                            <div class="col-md-10">
+                                <div class="form-group">
+                                    <label>Novo Codigo tamanho</label>
+                                    <input type="number" class="form-control" ng-model="newSizeProduct.tamanho">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>&nbsp;</label>
+                                    <button type="button" class="btn btn-success btn-block" ng-click="salvarTamanhoProduto()"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-10">
+                </div>
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-success btn-block" ng-click="salvarProduto()"><i class="fa fa-floppy-o" aria-hidden="true"></i> Salvar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</panel>

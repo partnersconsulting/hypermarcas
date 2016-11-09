@@ -1,0 +1,223 @@
+<panel title="Captação de Pedido" linkback="home" type="form">
+    <form class="form-inline">
+        <div class="row line-row-filtro">
+            <!-- 
+			<select ng-model="selectedGNV" ng-options="item in listaGNV" ng-change="update()"></select>
+			<select ng-model="me.myChoice" ng-options="item in listaGNV"></select>
+			<select ng-model="key" ng-options="key as key for (key, val) in listaGNV" ng-change="update()"></select>
+			 -->
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="multiline">Escritório de venda:</label>
+                    <select class="dropdown-alpa" ng-model="pedido.escritorio" ng-options="item.code for item in listaGNV"></select>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="multiline">Equipe de venda:</label>
+                    <select class="dropdown-alpa" ng-disabled="!pedido.escritorio" ng-model="pedido.equipe" ng-options="item.code for item in listaGRV "></select>
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="multiline">Região de venda:</label>
+                    <select class="dropdown-alpa" ng-disabled="!pedido.equipe" ng-model="pedido.regiao" ng-options="item.code for item in listaZONA | filter: {anterior: pedido.equipe.code}"></select>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="multiline">Cliente:</label>
+                    <select class="dropdown-alpa" ng-disabled="!pedido.regiao" ng-model="pedido.cliente" ng-options="item.code for item in listaCLIENTE | filter: {anterior: pedido.regiao.code}"></select>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="multiline">Data Pedido: </label>
+                    <input class="span-info line30" type="text" ng-model="dataPedido">
+                </div>
+            </div>
+        </div>
+        <div class="row" uib-collapse="!pedido.cliente">
+            <!--  <div class="row"> -->
+            <div class="col-md-2">
+                <img ng-if="selectedProduct" class="img-responsive img-produto" src="view/images/{{selectedProduct.foto}}">
+            </div>
+            <div class="col-md-10">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Nome</label>
+                            <div class="btn-group form-control" uib-dropdown is-open="status.isopen">
+                                <button id="single-button" type="button" class="btn-dropdown" uib-dropdown-toggle ng-disabled="disabled">
+                                    {{selectedProduct.name}} <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
+                                    <li role="menuitem" ng-repeat="product in products" ng-click="selectProduct(product.code)">{{product.name}}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label for="code">Código</label>
+                            <span class="span-info">{{selectedProduct.code}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label class="multiline">Valor R$</label>
+                            <input class="span-info" type="text" ng-model="selectedProduct.valor">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                        </div>
+                    </div>
+                </div>
+                <div class="row" uib-collapse="!pedido.cliente">
+                    <!--                 <div class="row"> -->
+                    <div class="col-md-2">
+                        <span class="cota-disponivel"> Cota disponível: </span>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label>GNV</label>
+                            <span class="span-info" ng-class="{'cota-info': selectedProduct.tipoBloqueio == 'gnv', 'cota-info-estourada':estourouCota == true && selectedProduct.cotaLivre == false}">{{selectedProduct.gnv}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label>GRV</label>
+                            <span class="span-info" ng-class="{'cota-info': selectedProduct.tipoBloqueio == 'grv', 'cota-info-estourada':estourouCota == true && selectedProduct.cotaLivre == false}">{{selectedProduct.grv}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label>Zona</label>
+                            <span class="span-info" ng-class="{'cota-info': selectedProduct.tipoBloqueio == 'zona', 'cota-info-estourada':estourouCota == true && selectedProduct.cotaLivre == false}">{{selectedProduct.zona}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group" ng-show="selectedProduct.tipoEstoque == 'geral'">
+                            <label>Estoque</label>
+                            <span class="span-info" ng-class="{'cota-info cota-info-estourada':estourouEstoque == true}">{{selectedProduct.estoque}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <span class="span-info selected-info" ng-show="selectedProduct.cotaLivre">Cota Livre</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="table-products" ng-show="pedido.cliente">
+        <!-- <div class="table-products"> -->
+        <div class="product-header">
+            <span>Cor</span>
+            <span ng-if="!tamanho.grade" ng-repeat="tamanho in tamanhos">Tam: {{tamanho.tamanho}}</span>
+            <span ng-if="tamanho.grade" ng-repeat="tamanho in tamanhos">Grade: {{tamanho.tamanho}}</span>
+        </div>
+        <!--  <div class="product" ng-repeat="opcao in selectedProduct.opcoes"> -->
+        <div class="product" ng-repeat="cor in cores">
+            <span>
+	            	<span style="background-color: #{{cor.cor}}" class="show-color">{{cor.cor}}</span>
+	            	<span  ng-show="selectedProduct.tipoEstoque == 'cor'" class="limite">{{cor.estoque }}</span>
+            </span>
+            <span ng-repeat="tamanho in tamanhos">
+	            	<input ng-if="tamanho.grade" class="input-sizes" type="number" max="{{tamanho.estoque}}"   ng-change="onChange()" ng-model="itemPedido[cor.cor][tamanho.tamanho].value">
+	            	<input ng-if="!tamanho.grade" class="input-sizes" type="number"    ng-change="onChange()" ng-model="itemPedido[cor.cor][tamanho.tamanho].value">
+	            	<span  ng-show="selectedProduct.tipoEstoque == 'tamanho'" class="limite">{{tamanho.estoque }}</span>
+	            	<span class="limite" ng-show="tamanho.grade">
+						<span class="item-grade" ng-repeat="item in tamanho.grade"> {{item.tamanho}}({{item.value}})&nbsp;&nbsp;</span>
+
+	            	</span>
+	            </span>
+        </div>
+        <div class="product-footer" ng-class="{'cota-estourada':estourouCota == true || estourouEstoque == true }">
+            <span>Total: {{totalTamanhos}} <span ng-if="estourouEstoque"> - Estoque Estourado!</span> <span ng-if="estourouCota"> - Cota Estourada!</span></span>
+
+            <span ng-repeat="tamanho in tamanhos"></span>
+        </div>
+    </div>
+    <div class="actions">
+        <button type="button" ng-disabled="estourouCota || estourouEstoque" class="btn btn-primary" ng-click="addItem()"><i class="fa fa-plus" aria-hidden="true"></i> Adicionar</button>
+    </div>
+    <div class="pedidos" ng-show="itensPedido.length">
+        <h3>Itens Carrinho:</h3>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Material</th>
+                    <th>Nome</th>
+                    <th>Cor</th>
+                    <th>Grade</th>
+                    <th>Tamanho</th>
+                    <th>Qnt</th>
+                    <th>Data disponível</th>
+                    <th>Preço unit.</th>
+                    <th>Preço Total</th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>{{totalValorPedido | currency:"R$" }}</td>
+                </tr>
+            </tfoot>
+            <tbody>
+                <tr ng-repeat="pedido in itensPedido">
+                    <td>{{pedido.produto.code}}</td>
+                    <td>{{pedido.produto.name}}</td>
+                    <td>{{pedido.produto.name}}</td>
+                    <td>{{pedido.grade}}</td>
+                    <td>{{pedido.tamanho}}</td>
+                    <td>{{pedido.value}}</td>
+                    <td>{{pedido.produto.data  | date:'dd-MM-yyyy' }}</td>
+                    <td>{{pedido.produto.valor | currency:"R$" }}</td>
+                    <td class="bold">{{pedido.produto.valor * pedido.value | currency:"R$"}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- 
+        <span ng-repeat="pedido in itensPedido" class="pedidoItem">
+
+			{{pedido.produto.code}} {{pedido.produto.valor}} {{pedido.tamanho}} {{pedido.value}}
+
+        </span>
+        <span ng-repeat="item in itensPedido" class="pedidoItem">
+        	        <span>Cod: {{item.code}}</span>
+        	        
+        	    	<span class="desc" ng-repeat="(key, value) in item" ng-if="key != 'code' && key != 'total'">Cor: {{key}}
+        	        							<span class="tamanhos" ng-repeat="(key2, value2) in value">( tam:{{key2}}: {{value2.value}} )</span>
+        	        </span>
+        	    
+        
+        		
+        
+        	        <span class="total">
+        		        Total: {{item.total}}
+        	        </span>
+        </span> -->
+    </div>
+    <div class="actions" ng-show="itensPedido.length">
+        <button type="button" class="btn btn-danger pull-left" ng-click="limparCarrinho()"><i class="fa fa-trash" aria-hidden="true"></i> Limpar Carrinho</button>
+        <button type="button" class="btn btn-info" ng-click="fecharCotacao()"><i class="fa fa-newspaper-o" aria-hidden="true"></i> Cotação</button>
+        <button type="button" class="btn btn-success" ng-click="fecharPedido()"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Pedido</button>
+    </div>
+
+
+	
+
+</panel>

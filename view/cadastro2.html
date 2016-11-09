@@ -1,0 +1,29 @@
+<panel title="Estrutura comercial" linkback="cadastros">
+    <div class="input-group input-group-lg">
+        <span class="input-group-addon" id="sizing-addon1"><i class="fa fa-search" aria-hidden="true"></i></span>
+        <input type="text" class="form-control" placeholder="busca" aria-describedby="sizing-addon1" ng-model="filtro">
+    </div>
+    <hr>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Nível 1</th>
+                <th>Descrição</th>
+                <th>Nível 2</th>
+                <th>Descrição</th>
+                <th>Nível 3</th>
+                <th>Descrição</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="item in listaEstrutura | filter:filtro">
+                <th>{{item.nivel1}}</th>
+                <th>{{item.desc1}}</th>
+                <th>{{item.nivel2}}</th>
+                <th>{{item.desc2}}</th>
+                <th>{{item.nivel3}}</th>
+                <th>{{item.desc3}}</th>
+            </tr>
+        </tbody>
+    </table>
+</panel>

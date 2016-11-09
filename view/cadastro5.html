@@ -1,0 +1,29 @@
+<panel title="Disponibilidade" linkback="cadastros">
+    <div class="input-group input-group-lg">
+        <span class="input-group-addon" id="sizing-addon1"><i class="fa fa-search" aria-hidden="true"></i></span>
+        <input type="text" class="form-control" placeholder="busca" aria-describedby="sizing-addon1" ng-model="filtro">
+    </div>
+    <hr>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Cor </th>
+                <th>Tamanho </th>
+                <th>Estoque Físico</th>
+                <th>Ordem Produção</th>
+                <th>Ordem Planejada</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="item in listaDisponibilidade | filter:filtro">
+                <th>{{item.cod}}</th>
+                <th>{{item.cor}}</th>
+                <th>{{item.tam}}</th>
+                <th>{{item.estoque}}</th>
+                <th>{{item.ordemPR}}</th>
+                <th>{{item.ordemPL}}</th>
+            </tr>
+        </tbody>
+    </table>
+</panel>

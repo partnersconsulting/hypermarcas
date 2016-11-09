@@ -1,0 +1,14 @@
+<div class="form-group" >
+    <label>{{ title }}</label>
+
+    <input name="nome" ng-show="type == 'text' || type == 'number' || type == 'email'" ng-model="model" class="form-control" type="{{type}}">
+    <input ng-show="type == 'phone'" ng-model="model" class="form-control" type="text" >
+
+
+    <select ng-show="type == 'select'" class="form-control" ng-model="model" ng-options="item.code for item in list"></select> 
+
+    <input ng-show="type == 'datepicker'" type="text" ng-init="dateOpened=false" class="form-control" uib-datepicker-popup="{{'dd-MM-yyyy'}}" ng-click="dateOpened = !dateOpened" ng-model="newVoluntario.data_nascimento" is-open="dateOpened" close-text="Close" /> 
+
+    <textarea ng-show="type == 'textarea'" class="form-control" rows="3" ng-model="model" ></textarea>
+
+</div>
