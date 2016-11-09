@@ -1,4 +1,4 @@
-<panel title="Cadastro de Voluntarios" linkback="cadastros">
+<panel title="Cadastro de Voluntarios" linkback="voluntarios">
     <div class="input-group input-group-lg grupo-busca">
         <span class="input-group-addon" id="sizing-addon1"><i class="fa fa-search" aria-hidden="true"></i></span>
         <input type="text" class="form-control" placeholder="busca" aria-describedby="sizing-addon1" ng-model="filtro">
@@ -18,16 +18,16 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="voluntario in voluntarios | filter:filtro" ng-class="{'danger':!voluntario.ativo}">
-                <td>{{voluntario.id}}</td>
-                <td>{{voluntario.nome}}</td>
-                <td>{{voluntario.telefone}}</td>
-                <td>{{voluntario.sexo}}</td>
-                <td>{{voluntario.perfil}}</td>
-                <td>{{voluntario.cidade}}-{{voluntario.estado}}</td>
-                <td><i class="fa" ng-class="{'fa-check-circle':voluntario.ativo, 'fa-times': !voluntario.ativo}"></i></td>
-                <td>{{dataValidade(voluntario.data_cadastro)}}</td>
-                <td> <span class="btn btn-info btn-xs" ng-click="visualizarVoluntario(voluntario)"><i class="fa fa-search" aria-hidden="true"></i></span></td>
+            <tr ng-repeat="itemVoluntario in voluntarios | filter:filtro" ng-class="{'tr-disabled':!itemVoluntario.ativo, 'tr-selected': itemVoluntario.id == voluntario.id}">
+                <td>{{itemVoluntario.id}}</td>
+                <td>{{itemVoluntario.nome}}</td>
+                <td>{{itemVoluntario.telefone}}</td>
+                <td>{{itemVoluntario.sexo}}</td>
+                <td>{{itemVoluntario.perfil}}</td>
+                <td>{{itemVoluntario.cidade}}-{{itemVoluntario.estado}}</td>
+                <td><i class="fa" ng-class="{'fa-check-circle':itemVoluntario.ativo, 'fa-times': !itemVoluntario.ativo}"></i></td>
+                <td>{{dataValidade(itemVoluntario.data_cadastro)}}</td>
+                <td> <span class="btn btn-info btn-xs" ng-click="visualizarVoluntario(itemVoluntario)"><i class="fa fa-search" aria-hidden="true"></i></span></td>
             </tr>
         </tbody>
     </table>
@@ -62,9 +62,109 @@
                     <showentry title="obs" type="textarea" size="12" value="{{newVoluntario.obs}}"></showentry>
                 </div>
             </uib-tab>
-            <uib-tab index="1" heading="Questionarios">Short Labeled Justified content</uib-tab>
-            <uib-tab index="2" heading="Anexos">Long Labeled Justified content</uib-tab>
-            <uib-tab index="3" heading="Status">Long Labeled Justified content</uib-tab>
+            <uib-tab index="1" heading="Questionarios">
+                <div class="input-group input-group-lg grupo-busca">
+                    <span class="input-group-addon" id="sizing-addon1"><i class="fa fa-search" aria-hidden="true"></i></span>
+                    <input type="text" class="form-control" placeholder="busca" aria-describedby="sizing-addon1" ng-model="filtroQuestionario">
+                </div>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Codigo</th>
+                            <th>Nome</th>
+                            <th>Data Respondido</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="pesquisa in voluntario.pesquisas | filter:filtroQuestionario">
+                            <td><i class="fa" ng-class="{'fa-check-square':pesquisa.respondido, 'fa-square-o': !pesquisa.respondido}"></i></td>
+                            <td>Nome</td>
+                            <td>{{pesquisa.id}}</td>
+                            <td>{{pesquisa.respondido | date:'dd-MM-yyyy'}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </uib-tab>
+            <uib-tab index="2" heading="Anexos">
+                <div class="row">
+                    <div class="col-md-3">
+                        <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMTQwIiBoZWlnaHQ9IjE0MCIgdmlld0JveD0iMCAwIDE0MCAxNDAiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPjwhLS0KU291cmNlIFVSTDogaG9sZGVyLmpzLzE0MHgxNDAKQ3JlYXRlZCB3aXRoIEhvbGRlci5qcyAyLjYuMC4KTGVhcm4gbW9yZSBhdCBodHRwOi8vaG9sZGVyanMuY29tCihjKSAyMDEyLTIwMTUgSXZhbiBNYWxvcGluc2t5IC0gaHR0cDovL2ltc2t5LmNvCi0tPjxkZWZzPjxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI+PCFbQ0RBVEFbI2hvbGRlcl8xNTg0Njk5MzEzOSB0ZXh0IHsgZmlsbDojQUFBQUFBO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1mYW1pbHk6QXJpYWwsIEhlbHZldGljYSwgT3BlbiBTYW5zLCBzYW5zLXNlcmlmLCBtb25vc3BhY2U7Zm9udC1zaXplOjEwcHQgfSBdXT48L3N0eWxlPjwvZGVmcz48ZyBpZD0iaG9sZGVyXzE1ODQ2OTkzMTM5Ij48cmVjdCB3aWR0aD0iMTQwIiBoZWlnaHQ9IjE0MCIgZmlsbD0iI0VFRUVFRSIvPjxnPjx0ZXh0IHg9IjQ0LjMxMjUiIHk9Ijc0LjUiPjE0MHgxNDA8L3RleHQ+PC9nPjwvZz48L3N2Zz4=" alt="..." class="img-thumbnail">
+                    </div>
+                    <div class="col-md-9">
+                        <div class="input-group input-group-lg grupo-busca">
+                            <span class="input-group-addon" id="sizing-addon1"><i class="fa fa-search" aria-hidden="true"></i></span>
+                            <input type="text" class="form-control" placeholder="busca" aria-describedby="sizing-addon1" ng-model="filtroAnexo">
+                        </div>
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Codigo</th>
+                                    <th>Tamanho</th>
+                                    <th>Data</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="pesquisa in voluntario.pesquisas | filter:filtroAnexo">
+                                    <td>Nome</td>
+                                    <td>{{pesquisa.id}}</td>
+                                    <td>{{pesquisa.respondido | date:'dd-MM-yyyy'}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </uib-tab>
+            <uib-tab index="3" heading="Status">
+                <div class="row">
+                    <div class="col-md-8 col-xs-10">
+                        <div class="well panel panel-default">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-4 text-center">
+                                        <img src="http://api.randomuser.me/portraits/women/21.jpg" alt="" class="center-block img-circle img-thumbnail img-responsive">
+                                        <ul class="list-inline ratings text-center" title="Ratings">
+                                            <li><a href="#"><span class="fa fa-star fa-lg"></span></a></li>
+                                            <li><a href="#"><span class="fa fa-star fa-lg"></span></a></li>
+                                            <li><a href="#"><span class="fa fa-star fa-lg"></span></a></li>
+                                            <li><a href="#"><span class="fa fa-star fa-lg"></span></a></li>
+                                            <li><a href="#"><span class="fa fa-star fa-lg"></span></a></li>
+                                        </ul>
+                                    </div>
+                                    <!--/col-->
+                                    <div class="col-xs-12 col-sm-8">
+                                        <h2>{{voluntario.nome}}</h2>
+                                        <p><strong>About: </strong> Web Designer / UI Expert. </p>
+                                        <p><strong>Hobbies: </strong> Read, out with friends, listen to music, draw and learn new things. </p>
+                                        <p><strong>Skills: </strong>
+                                            <span class="label label-info tags">html5</span>
+                                            <span class="label label-info tags">css3</span>
+                                            <span class="label label-info tags">jquery</span>
+                                            <span class="label label-info tags">bootstrap3</span>
+                                        </p>
+                                    </div>
+                                    <!--/col-->
+                                    <div class="clearfix"></div>
+                                    <div class="col-xs-12 col-sm-4">
+                                        <h2><strong> 20,7K </strong></h2>
+                                        <p><small>Followers</small></p>
+                                    </div>
+                                    <!--/col-->
+                                    <div class="col-xs-12 col-sm-4">
+                                        <h2><strong>245</strong></h2>
+                                        <p><small>Following</small></p>
+                                    </div>
+                                    <!--/col-->
+                                    <div class="col-xs-12 col-sm-4">
+                                        <h2><strong>43</strong></h2>
+                                        <p><small>Snippets</small></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </uib-tab>
         </uib-tabset>
     </div>
     <button type="button" class="btn btn-success" ng-show="collapseFormValuntario" ng-click="visualizarFormulario()"><i class="fa fa-plus" aria-hidden="true"></i> Adicionar Novo</button>

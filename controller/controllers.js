@@ -19,7 +19,7 @@ angular.module("App.controllers", [])
 
         $rootScope.collapseFormValuntario = true;
         $scope.newVoluntario = {};
-        $scope.newDate = new Date();
+        
 
         function novo() {
             $scope.newVoluntario = {};
@@ -35,7 +35,7 @@ angular.module("App.controllers", [])
             text: "Cadastro de Voluntarios",
             link: "/cadastro_voluntario"
         }, {
-            title: "Consultar",
+            title: "Relatórios",
             icon: "fa-search",
             text: "Consultar Lista Voluntarios",
             link: "/cotacoes"
@@ -75,7 +75,7 @@ angular.module("App.controllers", [])
             text: "Cadastro de Pesquisa",
             link: "/cadastro_pesquisa"
         }, {
-            title: "Consultar",
+            title: "Relatórios",
             icon: "fa-search",
             text: "Consultar Lista Pesquisas",
             link: "/cotacoes"
@@ -83,6 +83,8 @@ angular.module("App.controllers", [])
 
     })
     .controller("MainController", function($scope, $rootScope, $filter, $uibModal, $document, $location) {
+
+        $rootScope.newDate = new Date();
 
         $rootScope.listaVoluntarioSexo = [
             { code: 'masculino', name: '' },
@@ -128,12 +130,12 @@ angular.module("App.controllers", [])
             pais: 'Brasil',
             obs: 'Nada',
             ativo: true,
-            questionarios: [
-                { id: 1, respondido: true, data: new Date('7/30/2016') },
-                { id: 2, respondido: true, data: new Date('5/5/2016') },
-                { id: 3, respondido: false },
-                { id: 4, respondido: false },
-                { id: 5, respondido: false }
+            pesquisas: [
+                { id: 1, respondido: new Date('7/30/2016') },
+                { id: 2, respondido: new Date('5/5/2016') },
+                { id: 3, respondido: null },
+                { id: 4, respondido: null },
+                { id: 5, respondido: null }
             ]
         }, {
             id: '2',
@@ -156,12 +158,12 @@ angular.module("App.controllers", [])
             pais: 'Brasil',
             obs: 'Nada',
             ativo: true,
-            questionarios: [
-                { id: 1, respondido: true, data: new Date('9/5/2016') },
-                { id: 2, respondido: false },
-                { id: 3, respondido: false },
-                { id: 4, respondido: false },
-                { id: 5, respondido: false }
+            pesquisas: [
+                { id: 1, respondido: new Date('9/5/2016') },
+                { id: 2, respondido: null },
+                { id: 3, respondido: null },
+                { id: 4, respondido: null },
+                { id: 5, respondido: null }
             ]
         }, {
             id: '3',
@@ -184,11 +186,11 @@ angular.module("App.controllers", [])
             pais: 'Brasil',
             obs: '',
             ativo: false,
-            questionarios: [
-                { id: 1, respondido: true, data: new Date('3/15/2016') },
-                { id: 2, respondido: true, data: new Date('3/25/2016') },
-                { id: 3, respondido: true, data: new Date('4/12/2016') },
-                { id: 4, respondido: true, data: new Date('4/20/2016') }
+            pesquisas: [
+                { id: 1, respondido: new Date('3/15/2016') },
+                { id: 2, respondido: new Date('3/25/2016') },
+                { id: 3, respondido: new Date('4/12/2016') },
+                { id: 4, respondido: new Date('4/20/2016') }
             ]
         }, {
             id: '4',
@@ -211,18 +213,19 @@ angular.module("App.controllers", [])
             pais: 'Brasil',
             obs: '',
             ativo: true,
-            questionarios: [
-                { id: 1, respondido: false },
-                { id: 2, respondido: false },
-                { id: 3, respondido: false }
+            pesquisas: [
+                { id: 1, respondido: null },
+                { id: 2, respondido: null },
+                { id: 3, respondido: null }
             ]
         }];
 
 
-        $rootScope.listaQuestionarios = [{
+        $rootScope.listaPesquisas = [{
                 id: '1',
-                nome: 'Questionario 1',
+                nome: 'Pesquisa 1',
                 desc: 'Texto explicando Q1',
+                validade: new Date('10/20/2016'),
                 perguntas: [{
                         id: '1',
                         titulo: 'Pergunta1',
@@ -264,8 +267,9 @@ angular.module("App.controllers", [])
                 ]
             }, {
                 id: '2',
-                nome: 'Questionario 2',
+                nome: 'Pesquisa 2',
                 desc: 'Texto explicando Q2',
+                validade: new Date('12/05/2016'),
                 perguntas: [{
                         id: '1',
                         titulo: 'Pergunta1',
@@ -307,8 +311,9 @@ angular.module("App.controllers", [])
                 ]
             }, {
                 id: '3',
-                nome: 'Questionario 3',
+                nome: 'Pesquisa 3',
                 desc: 'Texto explicando Q3',
+                validade: new Date('12/1/2016'),
                 perguntas: [{
                         id: '1',
                         titulo: 'Pergunta1',
@@ -338,8 +343,9 @@ angular.module("App.controllers", [])
                 ]
             }, {
                 id: '4',
-                nome: 'Questionario 4',
+                nome: 'Pesquisa 4',
                 desc: 'Texto explicando Q4',
+                validade: new Date('1/1/2017'),
                 perguntas: [{
                         id: '1',
                         titulo: 'Pergunta1',
@@ -393,8 +399,9 @@ angular.module("App.controllers", [])
                 ]
             }, {
                 id: '5',
-                nome: 'Questionario 5',
+                nome: 'Pesquisa 5',
                 desc: 'Texto explicando Q5',
+                validade: new Date('2/15/2017'),
                 perguntas: [{
                         id: '1',
                         titulo: 'Pergunta1',

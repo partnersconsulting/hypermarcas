@@ -13,15 +13,26 @@
     }
 }
 
+.tr-disabled {
+    background-color: #ffacaa;
+}
+
+.tr-selected {
+    background-color: #5bc0de;
+    color: #fff;
+    font-weight: 600;
+    pointer-events: none;
+}
 
 .tab-content>.active {
     display: block;
     background: #fff;
-    padding: 0 10px;
+    padding: 10px 10px 0;
     border-bottom: 1px solid #ddd;
     border-left: 1px solid #ddd;
     border-right: 1px solid #ddd;
 }
+
 
 /* **************************************************** */
 
