@@ -92,7 +92,7 @@
                     </tbody>
                 </table>
                 <div class="row" ng-show="!viewVoluntario">
-                    <button ng-repeat="(key, pesquisa) in listaPesquisas" ng-show="!checkPesquisa(key)" type="button" class="btn btn-pesquisa" ng-click="addPesquisa(key)"><i class="fa fa-plus-circle" aria-hidden="true"></i> {{pesquisa.nome}}</button>
+                    <button ng-repeat="(key, pesquisa) in listaPesquisas" ng-disabled="!checkPesquisaVencida(key)" ng-show="!checkPesquisaUsada(key)" type="button" class="btn btn-pesquisa" ng-click="addPesquisa(key)"><i class="fa fa-plus-circle" aria-hidden="true"></i> {{pesquisa.nome}} <span ng-show="!checkPesquisaVencida(key)"> - Pesquisa Vencida!</span> </button>
                 </div>
             </uib-tab>
             <uib-tab index="2" heading="Anexos">

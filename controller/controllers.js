@@ -44,15 +44,21 @@ angular.module("App.controllers", [])
 
         $rootScope.dataValidade = function(date) {
             if (date) {
-
                 return date.getDate() + '/' + (date.getMonth() + 6) + '/' + date.getFullYear();
             }
         }
 
-        $scope.checkPesquisa = function(id) {
+        $scope.checkPesquisaUsada = function(id) {
             if ($scope.voluntario && $scope.voluntario.pesquisas) {
-
                 return $filter('getById')($scope.voluntario.pesquisas, id);
+            }
+        }
+        $scope.checkPesquisaVencida = function(id) {
+            var pesquisa = $filter('getById')($scope.listaPesquisas, id);
+            if (pesquisa) {
+                //console.log(pesquisa.id + ">> " + pesquisa.validade + " | " + new Date() + " | " +( pesquisa.validade > new Date()) );
+                return pesquisa.validade > new Date();
+                // return $filter('getById')($scope.listaPesquisas, id).validade > new Date();
             }
         }
 
@@ -90,7 +96,7 @@ angular.module("App.controllers", [])
 
         $scope.salvarVoluntario = function() {
 
-            console.log(">> " + $scope.voluntario.data_nascimento);
+
 
             //if (formulario.$valid) {
             $scope.voluntario.id = $rootScope.voluntarios.length + 1;
@@ -116,6 +122,54 @@ angular.module("App.controllers", [])
             link: "/cotacoes"
 
         }];
+
+        novo();
+        $rootScope.adicionandoPergunta = false;
+        $rootScope.viewPesquisa = false;
+        $scope.collapseFormPesquisa = true;
+
+
+
+        function novo() {
+            $scope.pesquisa = {};
+            $scope.pesquisa.data_cadastro = new Date();
+            $scope.pesquisa.ativo = true;
+
+            $scope.pesquisa.perguntas = [];
+
+            $scope.pergunta = {};
+            $scope.pergunta.respostas = [];
+        }
+
+        $scope.novaPesquisa = function() {
+            $scope.collapseFormPesquisa = false;
+            novo();
+
+        }
+
+        $scope.addPergunta = function() {
+            $scope.adicionandoPergunta = true;
+            $scope.addResposta();
+            $scope.addResposta();
+        }
+
+        $scope.addResposta = function() {
+            $scope.pergunta.respostas.push({id: $scope.pergunta.respostas.length, titulo: ''});
+        }
+
+        $scope.salvarPergunta = function() {
+            $scope.pergunta.id = $scope.pesquisa.perguntas.length;
+            $scope.pesquisa.perguntas.push($scope.pergunta);
+            $scope.pergunta = {};
+            $scope.pergunta.respostas = [];
+            $scope.adicionandoPergunta = false;
+        }
+
+        $scope.salvarPesquisa = function() {
+            $scope.pesquisa.id = $rootScope.listaPesquisas.length;
+            $rootScope.listaPesquisas.push($scope.pesquisa);
+            novo();
+        }
 
     })
     .controller("MainController", function($scope, $rootScope, $filter, $uibModal, $document, $location) {
@@ -158,16 +212,17 @@ angular.module("App.controllers", [])
         ];
 
         $rootScope.listaPesquisas = [{
-                id: '1',
+                id: '0',
                 nome: 'Pesquisa 1',
                 desc: 'Texto explicando Q1',
                 validade: new Date('10/20/2016'),
+                tipo: $rootScope.listaTiposQuestionario[0],
+                perfil: $rootScope.listaVoluntarioPerfil[0],
+                categoria: $rootScope.listaCategoriaQuestionario[0],
                 perguntas: [{
                         id: '1',
                         titulo: 'Pergunta1',
-                        tipo: 'Tipo1',
-                        categoria: 'CategoriaD66',
-                        perfil: 'A',
+
                         respostas: [
                             { id: '1', titulo: 'Resposta A' },
                             { id: '2', titulo: 'Resposta B' },
@@ -192,6 +247,44 @@ angular.module("App.controllers", [])
                         tipo: 'Tipo1',
                         categoria: 'CategoriaXpto99',
                         perfil: 'B',
+                        respostas: [
+                            { id: '1', titulo: 'Resposta AAA' },
+                            { id: '2', titulo: 'Resposta BBB' },
+                            { id: '3', titulo: 'Resposta CCC' },
+                            { id: '4', titulo: 'Resposta DDD' }
+                        ]
+                    }
+
+                ]
+            }, {
+                id: '1',
+                nome: 'Pesquisa 2',
+                desc: 'Texto explicando Q2',
+                validade: new Date('12/05/2016'),
+                tipo: $rootScope.listaTiposQuestionario[0],
+                perfil: $rootScope.listaVoluntarioPerfil[1],
+                categoria: $rootScope.listaCategoriaQuestionario[1],
+                perguntas: [{
+                        id: '1',
+                        titulo: 'Pergunta1',
+                        respostas: [
+                            { id: '1', titulo: 'Resposta A' },
+                            { id: '2', titulo: 'Resposta B' },
+                            { id: '3', titulo: 'Resposta C' },
+                            { id: '4', titulo: 'Resposta D' }
+                        ]
+                    }, {
+                        id: '2',
+                        titulo: 'Pergunta2',
+                        respostas: [
+                            { id: '1', titulo: 'Resposta AA' },
+                            { id: '2', titulo: 'Resposta BB' },
+                            { id: '3', titulo: 'Resposta CC' },
+                            { id: '4', titulo: 'Resposta DD' }
+                        ]
+                    }, {
+                        id: '3',
+                        titulo: 'Pergunta3',
                         respostas: [
                             { id: '1', titulo: 'Resposta AAA' },
                             { id: '2', titulo: 'Resposta BBB' },
@@ -203,15 +296,15 @@ angular.module("App.controllers", [])
                 ]
             }, {
                 id: '2',
-                nome: 'Pesquisa 2',
-                desc: 'Texto explicando Q2',
-                validade: new Date('12/05/2016'),
+                nome: 'Pesquisa 3',
+                desc: 'Texto explicando Q3',
+                validade: new Date('12/1/2016'),
+                tipo: $rootScope.listaTiposQuestionario[1],
+                perfil: $rootScope.listaVoluntarioPerfil[2],
+                categoria: $rootScope.listaCategoriaQuestionario[0],
                 perguntas: [{
                         id: '1',
                         titulo: 'Pergunta1',
-                        tipo: 'Tipo1',
-                        categoria: 'CategoriaD66',
-                        perfil: 'A',
                         respostas: [
                             { id: '1', titulo: 'Resposta A' },
                             { id: '2', titulo: 'Resposta B' },
@@ -221,73 +314,26 @@ angular.module("App.controllers", [])
                     }, {
                         id: '2',
                         titulo: 'Pergunta2',
-                        tipo: 'Tipo2',
-                        categoria: 'CategoriaD66',
-                        perfil: 'B',
                         respostas: [
                             { id: '1', titulo: 'Resposta AA' },
                             { id: '2', titulo: 'Resposta BB' },
                             { id: '3', titulo: 'Resposta CC' },
                             { id: '4', titulo: 'Resposta DD' }
-                        ]
-                    }, {
-                        id: '3',
-                        titulo: 'Pergunta3',
-                        tipo: 'Tipo1',
-                        categoria: 'CategoriaXpto99',
-                        perfil: 'B',
-                        respostas: [
-                            { id: '1', titulo: 'Resposta AAA' },
-                            { id: '2', titulo: 'Resposta BBB' },
-                            { id: '3', titulo: 'Resposta CCC' },
-                            { id: '4', titulo: 'Resposta DDD' }
                         ]
                     }
 
                 ]
             }, {
                 id: '3',
-                nome: 'Pesquisa 3',
-                desc: 'Texto explicando Q3',
-                validade: new Date('12/1/2016'),
-                perguntas: [{
-                        id: '1',
-                        titulo: 'Pergunta1',
-                        tipo: 'Tipo1',
-                        categoria: 'CategoriaD66',
-                        perfil: 'A',
-                        respostas: [
-                            { id: '1', titulo: 'Resposta A' },
-                            { id: '2', titulo: 'Resposta B' },
-                            { id: '3', titulo: 'Resposta C' },
-                            { id: '4', titulo: 'Resposta D' }
-                        ]
-                    }, {
-                        id: '2',
-                        titulo: 'Pergunta2',
-                        tipo: 'Tipo2',
-                        categoria: 'CategoriaD66',
-                        perfil: 'B',
-                        respostas: [
-                            { id: '1', titulo: 'Resposta AA' },
-                            { id: '2', titulo: 'Resposta BB' },
-                            { id: '3', titulo: 'Resposta CC' },
-                            { id: '4', titulo: 'Resposta DD' }
-                        ]
-                    }
-
-                ]
-            }, {
-                id: '4',
                 nome: 'Pesquisa 4',
                 desc: 'Texto explicando Q4',
                 validade: new Date('1/1/2017'),
+                tipo: $rootScope.listaTiposQuestionario[2],
+                perfil: $rootScope.listaVoluntarioPerfil[1],
+                categoria: $rootScope.listaCategoriaQuestionario[1],
                 perguntas: [{
                         id: '1',
                         titulo: 'Pergunta1',
-                        tipo: 'Tipo1',
-                        categoria: 'CategoriaD66',
-                        perfil: 'A',
                         respostas: [
                             { id: '1', titulo: 'Resposta A' },
                             { id: '2', titulo: 'Resposta B' },
@@ -297,9 +343,6 @@ angular.module("App.controllers", [])
                     }, {
                         id: '2',
                         titulo: 'Pergunta2',
-                        tipo: 'Tipo2',
-                        categoria: 'CategoriaD66',
-                        perfil: 'B',
                         respostas: [
                             { id: '1', titulo: 'Resposta AA' },
                             { id: '2', titulo: 'Resposta BB' },
@@ -309,9 +352,6 @@ angular.module("App.controllers", [])
                     }, {
                         id: '3',
                         titulo: 'Pergunta3',
-                        tipo: 'Tipo1',
-                        categoria: 'CategoriaXpto99',
-                        perfil: 'B',
                         respostas: [
                             { id: '1', titulo: 'Resposta AAA' },
                             { id: '2', titulo: 'Resposta BBB' },
@@ -321,9 +361,6 @@ angular.module("App.controllers", [])
                     }, {
                         id: '4',
                         titulo: 'Pergunta4',
-                        tipo: 'Tipo3',
-                        categoria: 'CategoriaXpto99',
-                        perfil: 'C',
                         respostas: [
                             { id: '1', titulo: 'Resposta AAAA' },
                             { id: '2', titulo: 'Resposta BBBB' },
@@ -334,16 +371,16 @@ angular.module("App.controllers", [])
 
                 ]
             }, {
-                id: '5',
+                id: '4',
                 nome: 'Pesquisa 5',
                 desc: 'Texto explicando Q5',
                 validade: new Date('2/15/2017'),
+                tipo: $rootScope.listaTiposQuestionario[2],
+                perfil: $rootScope.listaVoluntarioPerfil[0],
+                categoria: $rootScope.listaCategoriaQuestionario[0],
                 perguntas: [{
                     id: '1',
                     titulo: 'Pergunta1',
-                    tipo: 'Tipo1',
-                    categoria: 'CategoriaD66',
-                    perfil: 'A',
                     respostas: [
                         { id: '1', titulo: 'Resposta A' },
                         { id: '2', titulo: 'Resposta B' },
@@ -352,9 +389,6 @@ angular.module("App.controllers", [])
                 }, {
                     id: '2',
                     titulo: 'Pergunta2',
-                    tipo: 'Tipo2',
-                    categoria: 'CategoriaD66',
-                    perfil: 'B',
                     respostas: [
                         { id: '1', titulo: 'Resposta AA' },
                         { id: '2', titulo: 'Resposta BB' },
@@ -363,9 +397,6 @@ angular.module("App.controllers", [])
                 }, {
                     id: '3',
                     titulo: 'Pergunta3',
-                    tipo: 'Tipo1',
-                    categoria: 'CategoriaXpto99',
-                    perfil: 'B',
                     respostas: [
                         { id: '1', titulo: 'Resposta AAA' },
                         { id: '2', titulo: 'Resposta BBB' },
@@ -374,9 +405,6 @@ angular.module("App.controllers", [])
                 }, {
                     id: '4',
                     titulo: 'Pergunta4',
-                    tipo: 'Tipo3',
-                    categoria: 'CategoriaXpto99',
-                    perfil: 'C',
                     respostas: [
                         { id: '1', titulo: 'Resposta AAAA' },
                         { id: '2', titulo: 'Resposta BBBB' },
@@ -385,9 +413,6 @@ angular.module("App.controllers", [])
                 }, {
                     id: '5',
                     titulo: 'Pergunta5',
-                    tipo: 'Tipo1',
-                    categoria: 'CategoriaXpto99',
-                    perfil: 'C',
                     respostas: [
                         { id: '1', titulo: 'Resposta AAAAA' },
                         { id: '2', titulo: 'Resposta BBBBB' },
@@ -402,7 +427,7 @@ angular.module("App.controllers", [])
         $rootScope.voluntarios = [{
             id: '1',
             nome: 'Marcos Aurelio',
-            status: {nome: $rootScope.listaVoluntarioStatus[0], motivo: ''},
+            status: { nome: $rootScope.listaVoluntarioStatus[0], motivo: '' },
             data_nascimento: new Date('5/30/1988'),
             data_cadastro: new Date('06/29/2016'),
             telefone: '11 9 5155-5555',
@@ -436,7 +461,7 @@ angular.module("App.controllers", [])
         }, {
             id: '2',
             nome: 'Jose Silva',
-            status: {nome: $rootScope.listaVoluntarioStatus[0], motivo: ''},
+            status: { nome: $rootScope.listaVoluntarioStatus[0], motivo: '' },
             data_nascimento: new Date('10/2/1977'),
             data_cadastro: new Date('07/31/2016'),
             telefone: '11 9 9999-5555',
@@ -465,7 +490,7 @@ angular.module("App.controllers", [])
         }, {
             id: '3',
             nome: 'Maria do Socorro',
-            status: {nome: $rootScope.listaVoluntarioStatus[2], motivo:  $rootScope.listaVoluntarioMotivo[2]},
+            status: { nome: $rootScope.listaVoluntarioStatus[2], motivo: $rootScope.listaVoluntarioMotivo[2] },
             data_nascimento: new Date('5/20/1945'),
             data_cadastro: new Date('02/19/2016'),
             telefone: '71 9 8888-5555',
@@ -493,7 +518,7 @@ angular.module("App.controllers", [])
         }, {
             id: '4',
             nome: 'Roberto Viana',
-            status: {nome: $rootScope.listaVoluntarioStatus[0], motivo: ''},
+            status: { nome: $rootScope.listaVoluntarioStatus[0], motivo: '' },
             data_nascimento: new Date('12/5/1977'),
             data_cadastro: new Date('07/25/2016'),
             telefone: '22 9 6666-5555',
