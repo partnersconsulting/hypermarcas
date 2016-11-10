@@ -40,11 +40,13 @@ angular.module('App.directives', [])
         var ddo = {};
 
 
+
         ddo.restrict = 'E';
         ddo.scope = {
             title: '@title',
             size: '@size',
             type: '@type',
+
             onlyview: '=',
             list: '=',
             model: '='
@@ -60,6 +62,9 @@ angular.module('App.directives', [])
                 $scope.name = $attrs.model;
             }
         }
+
+
+
 
         ddo.compile = function(element, attrs) {
             element.attr('class', "col-md-" + attrs.size);

@@ -143,6 +143,28 @@ angular.module("App.controllers", [])
 
 
 
+
+
+        $scope.onChangeCep = function() {
+            
+
+            var cep = $filter('getByCEP')($scope.listaCeps, $scope.voluntario.cep);
+            console.log('>> ' + cep);
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         function novo() {
             $scope.pesquisa = {};
             $scope.pesquisa.data_cadastro = new Date();
@@ -230,7 +252,7 @@ angular.module("App.controllers", [])
                 //console.log('faixa_etaria: ' + );
             }
 
-        
+
 
             return returnValue;
         };
@@ -256,6 +278,18 @@ angular.module("App.controllers", [])
     .controller("MainController", function($scope, $rootScope, $filter, $uibModal, $document, $location) {
 
         $rootScope.newDate = new Date();
+
+
+        $rootScope.listaCeps = [
+            { code: '04013010', cep: '04013-010', rua: 'Rua Remanso', bairro: 'Vila Mariana', cidade: 'São Paulo', estado: 'SP' },
+            { code: '04013020', cep: '04013-020', rua: 'Rua Maracaju', bairro: 'Vila Mariana', cidade: 'São Paulo', estado: 'SP' },
+            { code: '04013030', cep: '04013-030', rua: 'Rua Ambrosina de Macedo', bairro: 'Vila Mariana', cidade: 'São Paulo', estado: 'SP' },
+            { code: '04013040', cep: '04013-040', rua: 'Rua Cubatão', bairro: 'Vila Mariana', cidade: 'São Paulo', estado: 'SP' },
+            { code: '04013050', cep: '04013-050', rua: 'Rua Doutor Eduardo Martinelli', bairro: 'Vila Mariana', cidade: 'São Paulo', estado: 'SP' },
+            { code: '04013060', cep: '04013-060', rua: 'Rua Azevedo Macedo', bairro: 'Vila Mariana', cidade: 'São Paulo', estado: 'SP' },
+            { code: '04013070', cep: '04013-070', rua: 'Viaduto Engenheiro Antônio de Carvalho Aguiar', bairro: 'Vila Mariana', cidade: 'São Paulo', estado: 'SP' },
+            { code: '04013080', cep: '04013-080', rua: 'Praça Máximos IV Sayegh', bairro: 'Vila Mariana', cidade: 'São Paulo', estado: 'SP' }
+        ];
 
         $rootScope.listaCidades = [
             { code: 'Rio Branco', name: 'Rio Branco' },
@@ -696,6 +730,64 @@ angular.module("App.controllers", [])
                 { respondido: null, pesquisa: $rootScope.listaPesquisas[0] },
                 { respondido: null, pesquisa: $rootScope.listaPesquisas[1] },
                 { respondido: null, pesquisa: $rootScope.listaPesquisas[2] }
+            ]
+        }, {
+            id: '5',
+            nome: 'Erick Azevedo Cardoso',
+            status: { nome: $rootScope.listaVoluntarioStatus[0], motivo: '' },
+            data_nascimento: new Date('12/30/1993'),
+            data_cadastro: new Date('07/31/2016'),
+            telefone: '(41) 7460-3390',
+            sexo: 'masculino',
+            email: 'ErickAzevedoCardoso@rhyta.com',
+            rg: '0175194614',
+            cpf: '580.304.854-25',
+            perfil: 'B',
+            cep: '83215-010',
+            rua: 'Rua das Hortências',
+            numero: '388',
+            complemento: '',
+            bairro: 'Paraiso',
+            cidade: 'São Paulo',
+            estado: 'SP',
+            pais: 'Brasil',
+            obs: 'Nada',
+            ativo: true,
+            pesquisas: [
+                { respondido: new Date('9/5/2016'), pesquisa: $rootScope.listaPesquisas[0] },
+                { respondido: new Date('9/5/2016'), pesquisa: $rootScope.listaPesquisas[1] },
+                { respondido: new Date('9/5/2016'), pesquisa: $rootScope.listaPesquisas[2] },
+                { respondido: null, pesquisa: $rootScope.listaPesquisas[3] },
+                { respondido: null, pesquisa: $rootScope.listaPesquisas[4] }
+            ]
+        }, {
+            id: '6',
+            nome: 'João Barbosa Goncalves',
+            status: { nome: $rootScope.listaVoluntarioStatus[0], motivo: '' },
+            data_nascimento: new Date('09/11/1985'),
+            data_cadastro: new Date('08/31/2016'),
+            telefone: '(14) 8255-4123',
+            sexo: 'masculino',
+            email: 'JoaoBarbosaGoncalves@armyspy.com',
+            rg: '7761689140',
+            cpf: '827.584.532-75',
+            perfil: 'B',
+            cep: '83215-010',
+            rua: 'Rua José Eduardo de Oliveira Castro',
+            numero: '240',
+            complemento: '',
+            bairro: 'Paraiso',
+            cidade: 'São Paulo',
+            estado: 'SP',
+            pais: 'Brasil',
+            obs: 'Nada',
+            ativo: true,
+            pesquisas: [
+                { respondido: null, pesquisa: $rootScope.listaPesquisas[0] },
+                { respondido: new Date('9/5/2016'), pesquisa: $rootScope.listaPesquisas[1] },
+                { respondido: new Date('9/5/2016'), pesquisa: $rootScope.listaPesquisas[2] },
+                { respondido: null, pesquisa: $rootScope.listaPesquisas[3] },
+                { respondido: null, pesquisa: $rootScope.listaPesquisas[4] }
             ]
         }];
 

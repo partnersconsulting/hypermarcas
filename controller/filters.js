@@ -15,4 +15,16 @@ angular.module("App.filters", [])
             }
             return null;
         }
+    })
+    .filter('getByCEP', function() {
+        return function(input, cep) {
+            var i = 0,
+                len = input.length;
+            for (; i < len; i++) {
+                if (+input[i].code == +cep) {
+                    return input[i];
+                }
+            }
+            return null;
+        }
     });
