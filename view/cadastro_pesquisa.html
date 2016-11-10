@@ -72,13 +72,13 @@
                 <div class="row flex-row" ng-show="adicionandoPergunta">
                     <entry title="Resposta {{key}}" ng-repeat="(key, resposta) in pergunta.respostas" onlyview="viewPesquisa" type="text" size="12" model="resposta.titulo"></entry>
                     <div class="col-md-3">
-                        <button type="button" class="btn btn-primary pull-right" ng-click="addResposta()">Adicionar Resposta</button>
+                        <button type="button" class="btn btn-primary pull-right button-inline" ng-click="addResposta()">Adicionar Resposta</button>
                     </div>
                 </div>
-                <div class="row flex-row" ng-show="adicionandoPergunta">
+                <div class="row button-row" ng-show="adicionandoPergunta">
                     <button type="button" class="btn btn-primary pull-right" ng-click="salvarPergunta()">Salvar Pergunta</button>
                 </div>
-                <div class="row flex-row" ng-hide="adicionandoPergunta">
+                <div class="row button-row" ng-hide="adicionandoPergunta">
                     <button type="button" class="btn btn-primary pull-right" ng-click="addPergunta()">Adicionar Pergunta</button>
                 </div>
             </uib-tab>
