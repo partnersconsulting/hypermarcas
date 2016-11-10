@@ -41,19 +41,24 @@ angular.module('App.directives', [])
 
 
 
+
+
+
         ddo.restrict = 'E';
+
         ddo.scope = {
             title: '@title',
             size: '@size',
             type: '@type',
-
             onlyview: '=',
             list: '=',
             model: '='
         }
 
-        ddo.controller = function($scope, $attrs) {
+        ddo.controller = function($rootScope, $scope, $attrs) {
             //console.log("onlyview: " + $scope.model);
+
+
 
             if (!$scope.size) {
                 $scope.size = 2;
