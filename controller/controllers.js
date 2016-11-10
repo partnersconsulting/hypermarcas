@@ -4,12 +4,19 @@ angular.module("App.controllers", [])
             title: "Voluntarios",
             icon: "fa-users",
             text: "Gerenciador de Voluntarios",
-            link: "/voluntarios"
+            //link: "/voluntarios"
+            link: "/cadastro_voluntario"
         }, {
             title: "Pesquisas",
             icon: "fa-list-ol",
             text: "Consultar/Cadastrar Pesquisas",
-            link: "/pesquisas"
+            //link: "/pesquisas"
+            link: "/cadastro_pesquisa"
+        }, {
+            title: "Relatórios",
+            icon: "fa-search",
+            text: "Consultar por Voluntarios ou Pesquisas",
+            link: "/relatorios"
         }];
 
     })
@@ -31,16 +38,18 @@ angular.module("App.controllers", [])
 
 
         $scope.links = [{
-            title: "Cadastro",
-            icon: "fa-plus-square",
-            text: "Cadastro de Voluntarios",
-            link: "/cadastro_voluntario"
-        }/*, {
-            title: "Relatórios",
-            icon: "fa-search",
-            text: "Consultar Lista Voluntarios",
-            link: "/cotacoes"
-        }*/];
+                title: "Cadastro",
+                icon: "fa-plus-square",
+                text: "Cadastro de Voluntarios",
+                link: "/cadastro_voluntario"
+            }
+            /*, {
+                        title: "Relatórios",
+                        icon: "fa-search",
+                        text: "Consultar Lista Voluntarios",
+                        link: "/cotacoes"
+                    }*/
+        ];
 
         $rootScope.dataValidade = function(date) {
             if (date) {
@@ -102,6 +111,8 @@ angular.module("App.controllers", [])
             $scope.voluntario.id = $rootScope.voluntarios.length + 1;
             $scope.voluntario.sexo = $scope.voluntario.sexo.code;
             $scope.voluntario.perfil = $scope.voluntario.perfil.code;
+            $scope.voluntario.cidade = $scope.voluntario.cidade.code;
+            $scope.voluntario.estado = $scope.voluntario.estado.code;
             $rootScope.voluntarios.push($scope.voluntario);
             novo();
             $scope.addVoluntario = !$scope.addVoluntario;
@@ -111,17 +122,19 @@ angular.module("App.controllers", [])
     })
     .controller("PesquisasController", function($scope, $rootScope) {
         $scope.links = [{
-            title: "Cadastro",
-            icon: "fa-plus-square",
-            text: "Cadastro de Pesquisa",
-            link: "/cadastro_pesquisa"
-        }/*, {
-            title: "Relatórios",
-            icon: "fa-search",
-            text: "Consultar Lista Pesquisas",
-            link: "/cotacoes"
+                title: "Cadastro",
+                icon: "fa-plus-square",
+                text: "Cadastro de Pesquisa",
+                link: "/cadastro_pesquisa"
+            }
+            /*, {
+                        title: "Relatórios",
+                        icon: "fa-search",
+                        text: "Consultar Lista Pesquisas",
+                        link: "/cotacoes"
 
-        }*/];
+                    }*/
+        ];
 
         novo();
         $rootScope.adicionandoPergunta = false;
@@ -154,7 +167,7 @@ angular.module("App.controllers", [])
         }
 
         $scope.addResposta = function() {
-            $scope.pergunta.respostas.push({id: $scope.pergunta.respostas.length, titulo: ''});
+            $scope.pergunta.respostas.push({ id: $scope.pergunta.respostas.length, titulo: '' });
         }
 
         $scope.salvarPergunta = function() {
@@ -170,45 +183,187 @@ angular.module("App.controllers", [])
             $rootScope.listaPesquisas.push($scope.pesquisa);
             novo();
         }
+    })
+    .controller("RelatoriosController", function($scope, $rootScope) {
+
+        $scope.busca = {};
+        $scope.busca.sexo = {};
+        $scope.busca.perfil = {};
+
+        $scope.busca.cidade = {};
+        $scope.busca.estado = {};
+
+        $scope.busca.faixa_etaria = {};
+
+        function init() {
+
+        }
+
+        $scope.filterCodes = function(obj) {
+            var returnValue = true;
+
+            if (returnValue && $scope.busca.sexo && $scope.busca.sexo.code) {
+                returnValue = obj.sexo == $scope.busca.sexo.code;
+            }
+
+            if (returnValue && $scope.busca.perfil && $scope.busca.perfil.code) {
+                returnValue = obj.perfil == $scope.busca.perfil.code;
+            }
+
+            if (returnValue && $scope.busca.ativo) {
+                returnValue = obj.ativo == $scope.busca.ativo.code;
+            }
+
+            if (returnValue && $scope.busca.estado && $scope.busca.estado.code) {
+                returnValue = obj.estado == $scope.busca.estado.code;
+            }
+
+            if (returnValue && $scope.busca.cidade && $scope.busca.cidade.code) {
+                returnValue = obj.cidade == $scope.busca.cidade.code;
+            }
+
+
+            if (returnValue && $scope.busca.faixa_etaria && $scope.busca.faixa_etaria.code) {
+                var age = ~~((Date.now() - obj.data_nascimento) / (31557600000));
+                var filter = $scope.busca.faixa_etaria.code.split('|');
+                returnValue = age >= filter[0] && age < filter[1];
+                //console.log('faixa_etaria: ' + );
+            }
+
+        
+
+            return returnValue;
+        };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     })
     .controller("MainController", function($scope, $rootScope, $filter, $uibModal, $document, $location) {
 
         $rootScope.newDate = new Date();
 
+        $rootScope.listaCidades = [
+            { code: 'Rio Branco', name: 'Rio Branco' },
+            { code: 'Maceió', name: 'Maceió' },
+            { code: 'Macapá', name: 'Macapá' },
+            { code: 'Manaus', name: 'Manaus' },
+            { code: 'Salvador', name: 'Salvador' },
+            { code: 'Fortaleza', name: 'Fortaleza' },
+            { code: 'Brasília', name: 'Brasília' },
+            { code: 'Vitória', name: 'Vitória' },
+            { code: 'Goiânia', name: 'Goiânia' },
+            { code: 'São Luís', name: 'São Luís' },
+            { code: 'Cuiabá', name: 'Cuiabá' },
+            { code: 'Campo Grande', name: 'Campo Grande' },
+            { code: 'Belo Horizonte', name: 'Belo Horizonte' },
+            { code: 'Belém', name: 'Belém' },
+            { code: 'João Pessoa', name: 'João Pessoa' },
+            { code: 'Curitiba', name: 'Curitiba' },
+            { code: 'Recife', name: 'Recife' },
+            { code: 'Teresina', name: 'Teresina' },
+            { code: 'Rio de Janeiro', name: 'Rio de Janeiro' },
+            { code: 'Natal', name: 'Natal' },
+            { code: 'Porto Alegre', name: 'Porto Alegre' },
+            { code: 'Porto Velho', name: 'Porto Velho' },
+            { code: 'Boa Vista', name: 'Boa Vista' },
+            { code: 'Florianópolis', name: 'Florianópolis' },
+            { code: 'São Paulo', name: 'São Paulo' },
+            { code: 'Aracaju', name: 'Aracaju' },
+            { code: 'Palmas', name: 'Palmas' }
+        ];
+
+        $rootScope.listaEstados = [
+            { code: 'AC', name: 'AC' },
+            { code: 'AL', name: 'AL' },
+            { code: 'AP', name: 'AP' },
+            { code: 'AM', name: 'AM' },
+            { code: 'BA', name: 'BA' },
+            { code: 'CE', name: 'CE' },
+            { code: 'DF', name: 'DF' },
+            { code: 'ES', name: 'ES' },
+            { code: 'GO', name: 'GO' },
+            { code: 'MA', name: 'MA' },
+            { code: 'MT', name: 'MT' },
+            { code: 'MS', name: 'MS' },
+            { code: 'MG', name: 'MG' },
+            { code: 'PA', name: 'PA' },
+            { code: 'PB', name: 'PB' },
+            { code: 'PR', name: 'PR' },
+            { code: 'PE', name: 'PE' },
+            { code: 'PI', name: 'PI' },
+            { code: 'RJ', name: 'RJ' },
+            { code: 'RN', name: 'RN' },
+            { code: 'RS', name: 'RS' },
+            { code: 'RO', name: 'RO' },
+            { code: 'RR', name: 'RR' },
+            { code: 'SC', name: 'SC' },
+            { code: 'SP', name: 'SP' },
+            { code: 'SE', name: 'SE' },
+            { code: 'TO', name: 'TO' }
+        ];
+
+        $rootScope.listaIdades = [
+            { code: '0|18', name: 'menor de 18' },
+            { code: '18|25', name: 'de 18 a 25' },
+            { code: '25|30', name: 'de 25 a 30' },
+            { code: '30|45', name: 'de 30 a 45' },
+            { code: '45|60', name: 'de 45 a 60' },
+            { code: '60|100', name: 'acima de 60' }
+        ];
+
         $rootScope.listaVoluntarioSexo = [
-            { code: 'masculino', name: '' },
-            { code: 'feminino', name: '' }
+            { code: 'masculino', name: 'masculino' },
+            { code: 'feminino', name: 'feminino' }
+        ];
+
+        $rootScope.listaAtivo = [
+            { code: true, name: 'Ativo' },
+            { code: false, name: 'False' }
         ];
 
         $rootScope.listaVoluntarioPerfil = [
-            { code: 'A', name: '' },
-            { code: 'B', name: '' },
-            { code: 'C', name: '' }
+            { code: 'A', name: 'A' },
+            { code: 'B', name: 'B' },
+            { code: 'C', name: 'C' }
         ];
 
         $rootScope.listaVoluntarioStatus = [
-            { code: 'Ativo', name: '' },
-            { code: 'Vencido', name: '' },
-            { code: 'Inativo', name: '' }
+            { code: 'Ativo', name: 'Ativo' },
+            { code: 'Vencido', name: 'Vencido' },
+            { code: 'Inativo', name: 'Inativo' }
         ];
 
         $rootScope.listaVoluntarioMotivo = [
-            { code: 'Gestante', name: '' },
-            { code: 'Falecimento', name: '' },
-            { code: 'Opt OUT', name: '' }
+            { code: 'Gestante', name: 'Gestante' },
+            { code: 'Falecimento', name: 'Falecimento' },
+            { code: 'Opt OUT', name: 'Opt OUT' }
         ];
 
         $rootScope.listaTiposQuestionario = [
-            { code: 'Tipo1', name: '' },
-            { code: 'Tipo2', name: '' },
-            { code: 'Tipo3', name: '' },
-            { code: 'Tipo4', name: '' }
+            { code: 'Tipo1', name: 'Tipo1' },
+            { code: 'Tipo2', name: 'Tipo2' },
+            { code: 'Tipo3', name: 'Tipo3' },
+            { code: 'Tipo4', name: 'Tipo4' }
         ];
 
         $rootScope.listaCategoriaQuestionario = [
-            { code: 'CategoriaD66', name: '' },
-            { code: 'CategoriaXpto99', name: '' }
+            { code: 'CategoriaD66', name: 'CategoriaD66' },
+            { code: 'CategoriaXpto99', name: 'CategoriaXpto99' }
         ];
 
         $rootScope.listaPesquisas = [{
@@ -519,7 +674,7 @@ angular.module("App.controllers", [])
             id: '4',
             nome: 'Roberto Viana',
             status: { nome: $rootScope.listaVoluntarioStatus[0], motivo: '' },
-            data_nascimento: new Date('12/5/1977'),
+            data_nascimento: new Date('12/5/1981'),
             data_cadastro: new Date('07/25/2016'),
             telefone: '22 9 6666-5555',
             sexo: 'masculino',

@@ -22,6 +22,10 @@ angular.module('App', ["App.controllers", "App.services", "App.directives", "App
                 templateUrl: 'view/cadastro_pesquisa.html',
                 controller: 'PesquisasController'
             })
+            .when('/relatorios', {
+                templateUrl: 'view/relatorios.html',
+                controller: 'RelatoriosController'
+            })
             
 
             .otherwise({ redirectTo: 'home' });
