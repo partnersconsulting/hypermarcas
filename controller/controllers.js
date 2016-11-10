@@ -35,12 +35,12 @@ angular.module("App.controllers", [])
             icon: "fa-plus-square",
             text: "Cadastro de Voluntarios",
             link: "/cadastro_voluntario"
-        }, {
+        }/*, {
             title: "Relatórios",
             icon: "fa-search",
             text: "Consultar Lista Voluntarios",
             link: "/cotacoes"
-        }];
+        }*/];
 
         $rootScope.dataValidade = function(date) {
             if (date) {
@@ -115,13 +115,13 @@ angular.module("App.controllers", [])
             icon: "fa-plus-square",
             text: "Cadastro de Pesquisa",
             link: "/cadastro_pesquisa"
-        }, {
+        }/*, {
             title: "Relatórios",
             icon: "fa-search",
             text: "Consultar Lista Pesquisas",
             link: "/cotacoes"
 
-        }];
+        }*/];
 
         novo();
         $rootScope.adicionandoPergunta = false;
