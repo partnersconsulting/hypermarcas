@@ -1,4 +1,4 @@
-angular.module('App', ["App.controllers", "App.services", "App.directives", "App.filters", 'ngAnimate', "ngRoute", "ngResource", 'ui.bootstrap'])
+angular.module('App', ["App.controllers", "App.services", "App.directives", "App.filters", 'ngAnimate', "ngRoute", "ngResource", 'ui.bootstrap', 'ngCsv'])
     .config(function($routeProvider) {
 
         $routeProvider
